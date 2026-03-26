@@ -27,6 +27,7 @@ npm run test:watch   # Watch mode (requires services already running)
 ```
 
 To run a single test file:
+
 ```bash
 npx jest tests/integrations/api/v1/status/get.test.js --runInBand
 ```
@@ -61,6 +62,7 @@ Commits must follow Conventional Commits format (enforced by `commitlint`). Use 
 ### API
 
 Current endpoints under `/api/v1/`:
+
 - `GET /api/v1/status` — Returns DB version, max connections, and open connections
 - `GET /api/v1/migrations` — Lists pending migrations (dry run)
 - `POST /api/v1/migrations` — Executes pending migrations
@@ -80,6 +82,7 @@ The `.env.development` file is committed and used by both the app and tests. Nod
 ### CI/CD
 
 GitHub Actions on pull requests:
+
 - `linting.yaml` — Runs Prettier, ESLint, and Commitlint checks
 - `tests.yaml` — Spins up PostgreSQL as a service and runs `npm run test:run`
 

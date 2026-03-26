@@ -11,7 +11,7 @@ Educational clone of [tabnews.com.br](https://tabnews.com.br) built with Next.js
 ### Development
 
 ```bash
-npm run dev          # Start Docker services, wait for Postgres, run migrations, then start Next.js
+npm run dev          # Orchestrates services, migrations, Next.js, and always stops services on exit/Ctrl+C
 npm run services:up  # Start Docker services only (PostgreSQL)
 npm run services:down # Stop and remove Docker containers
 npm run migration:create -- <name>  # Create a new migration file

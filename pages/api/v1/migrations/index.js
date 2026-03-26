@@ -1,4 +1,5 @@
-import migrationRunner from "node-pg-migrate";
+import pkg from "node-pg-migrate";
+const migrationRunner = pkg.default || pkg;
 import { join } from "node:path";
 import database from "infra/database";
 export default async function migrations(request, response) {

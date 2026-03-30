@@ -15,6 +15,21 @@ async function waitForAllServices() {
       if (response.status !== 200) {
         throw Error();
       }
+
+      const responseBody = await response.json();
+      const databaseStatus = responseBody.dependencies?.database?.status;
+
+      if (databaseStatus !== "up") {
+        throw Error();
+      }
+
+      const migrationsResponse = await fetch(
+        "http://localhost:3000/api/v1/migrations",
+      );
+
+      if (migrationsResponse.status !== 200) {
+        throw Error();
+      }
     }
   }
 }

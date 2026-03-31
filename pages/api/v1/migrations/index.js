@@ -11,6 +11,8 @@ export default async function migrations(request, response) {
   }
 
   let dbClient;
+  let responseStatusCode = 500;
+  let responseBody = { error: "Internal Server Error" };
   try {
     dbClient = await database.getNewClient();
     const defaultMigrationOptions = {
@@ -23,7 +25,8 @@ export default async function migrations(request, response) {
     };
     if (request.method === "GET") {
       const pendingMigrations = await migrationRunner(defaultMigrationOptions);
-      return response.status(200).json(pendingMigrations);
+      responseStatusCode = 200;
+      responseBody = pendingMigrations;
     }
     if (request.method === "POST") {
       const migrateMigrations = await migrationRunner({
@@ -32,14 +35,23 @@ export default async function migrations(request, response) {
       });
 
       if (migrateMigrations.length > 0) {
-        return response.status(201).json(migrateMigrations);
+        responseStatusCode = 201;
+        responseBody = migrateMigrations;
+      } else {
+        responseStatusCode = 200;
+        responseBody = migrateMigrations;
       }
-      return response.status(200).json(migrateMigrations);
     }
   } catch (error) {
     console.error(error);
-    throw error;
+    responseBody = {
+      error: error.message,
+    };
   } finally {
-    await dbClient.end();
+    if (dbClient) {
+      await dbClient.end();
+    }
   }
+
+  return response.status(responseStatusCode).json(responseBody);
 }

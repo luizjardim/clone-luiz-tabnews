@@ -1,4 +1,5 @@
 import database from "infra/database.js";
+import { InternalServerError } from "infra/errors";
 async function status(request, response) {
   const updatedAt = new Date().toISOString();
   let dbClient;
@@ -27,16 +28,12 @@ async function status(request, response) {
       },
     });
   } catch (error) {
-    response.status(200).json({
-      updated_at: updatedAt,
-      database: {
-        status: "down",
-      },
+    const publicErrorObject = new InternalServerError({
+      cause: error,
     });
-  } finally {
-    if (dbClient) {
-      await dbClient.end();
-    }
+    console.log("\n Erro dentro do catch do controller: ");
+    console.log(publicErrorObject);
+    response.status(500).json(publicErrorObject);
   }
 }
 export default status;
